@@ -155,7 +155,7 @@
    ============================================================ */
 (function initCountdown() {
   /* ✏️ Set your event date and time here — YYYY-MM-DDTHH:MM:SS */
-  const eventDate = new Date();
+const eventDate = new Date('2026-03-15T07:30:00');
 
   const daysEl = document.getElementById("cd-days");
   const hoursEl = document.getElementById("cd-hours");
