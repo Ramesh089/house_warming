@@ -4,160 +4,152 @@
    ============================================================ */
 
 /* ============================================================
-   1. NAVBAR — Scroll shrink effect + Mobile hamburger toggle
+   1. NAVBAR
    ============================================================ */
 (function initNavbar() {
-  const navbar = document.getElementById("navbar");
-  const toggle = document.getElementById("navToggle");
-  const navLinks = document.getElementById("navLinks");
+  const navbar   = document.getElementById('navbar');
+  const toggle   = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
 
   if (!navbar || !toggle || !navLinks) return;
 
-  window.addEventListener("scroll", () => {
-    navbar.classList.toggle("scrolled", window.scrollY > 60);
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
   });
 
-  toggle.addEventListener("click", () => {
-    const isOpen = navLinks.classList.toggle("open");
-    toggle.textContent = isOpen ? "✕" : "☰";
+  toggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    toggle.textContent = isOpen ? '✕' : '☰';
   });
 
-  navLinks.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      navLinks.classList.remove("open");
-      toggle.textContent = "☰";
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      toggle.textContent = '☰';
     });
   });
 })();
 
+
 /* ============================================================
-   2. SCROLL REVEAL ANIMATION
+   2. SCROLL REVEAL
    ============================================================ */
 (function initScrollReveal() {
-  const revealEls = document.querySelectorAll(".reveal");
+  const revealEls = document.querySelectorAll('.reveal');
   if (!revealEls.length) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const siblings =
-            entry.target.parentElement.querySelectorAll(".reveal");
-          let index = 0;
-          siblings.forEach((el, i) => {
-            if (el === entry.target) index = i;
-          });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+        let index = 0;
+        siblings.forEach((el, i) => { if (el === entry.target) index = i; });
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, (index % 6) * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-          setTimeout(
-            () => {
-              entry.target.classList.add("visible");
-            },
-            (index % 6) * 100,
-          );
-
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
-  );
-
-  revealEls.forEach((el) => observer.observe(el));
+  revealEls.forEach(el => observer.observe(el));
 })();
+
 
 /* ============================================================
    3. VIRTUAL HOUSE TOUR
    ============================================================ */
 (function initHouseTour() {
-  const tourButtons = document.querySelectorAll(".tour-btn");
-  const tourDisplay = document.getElementById("tourDisplay");
-  const placeholder = document.getElementById("tourPlaceholder");
+  const tourButtons = document.querySelectorAll('.tour-btn');
+  const tourDisplay = document.getElementById('tourDisplay');
+  const placeholder = document.getElementById('tourPlaceholder');
 
   if (!tourButtons.length || !tourDisplay) return;
 
   const rooms = {
     living: {
-      icon: "🛋️",
-      label: "Living Room",
-      sub: "A warm, open space bathed in natural light — perfect for family evenings and festive gatherings.",
-      grad: "linear-gradient(135deg, #6B1010, #3B0000)",
+      icon:  '🛋️',
+      label: 'Living Room',
+      sub:   'A warm, open space bathed in natural light — perfect for family evenings and festive gatherings.',
+      grad:  'linear-gradient(135deg, #6B1010, #3B0000)'
     },
     kitchen: {
-      icon: "🍳",
-      label: "Kitchen",
-      sub: "The heart of our home. Designed for fragrant curries, morning chai, and meals cooked with love.",
-      grad: "linear-gradient(135deg, #7B4F1E, #4A2A0A)",
+      icon:  '🍳',
+      label: 'Kitchen',
+      sub:   'The heart of our home. Designed for fragrant curries, morning chai, and meals cooked with love.',
+      grad:  'linear-gradient(135deg, #7B4F1E, #4A2A0A)'
     },
     pooja: {
-      icon: "🪔",
-      label: "Pooja Room",
-      sub: "A sacred sanctuary filled with incense and the glow of diyas — where every day begins with gratitude.",
-      grad: "linear-gradient(135deg, #B8860B, #7A5500)",
+      icon:  '🪔',
+      label: 'Pooja Room',
+      sub:   'A sacred sanctuary filled with incense and the glow of diyas — where every day begins with gratitude.',
+      grad:  'linear-gradient(135deg, #B8860B, #7A5500)'
     },
     bedroom: {
-      icon: "🛏️",
-      label: "Master Bedroom",
-      sub: "A serene retreat designed for peaceful rest and soft morning light.",
-      grad: "linear-gradient(135deg, #2E4A6B, #172438)",
-    },
+      icon:  '🛏️',
+      label: 'Master Bedroom',
+      sub:   'A serene retreat designed for peaceful rest and soft morning light.',
+      grad:  'linear-gradient(135deg, #2E4A6B, #172438)'
+    }
   };
 
-  tourButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const room = btn.dataset.room;
+  tourButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const room   = btn.dataset.room;
       const imgSrc = btn.dataset.img;
-      const data = rooms[room];
+      const data   = rooms[room];
 
-      tourButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      tourDisplay.style.opacity = "0";
+      tourButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tourDisplay.style.opacity = '0';
 
       setTimeout(() => {
         if (imgSrc) {
-          placeholder.style.background = "none";
-          placeholder.style.position = "relative";
-          placeholder.style.padding = "0";
-          placeholder.innerHTML = `
-            <img
-              src="${imgSrc}"
-              alt="${data.label}"
-              style="width:100%;height:100%;object-fit:cover;border-radius:0;display:block;position:absolute;inset:0;"
-              onerror="this.style.display='none'"
-            />
-            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.65));padding:1.5rem;text-align:center;">
-              <p style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold-light);">${data.icon} ${data.label}</p>
-              <p style="font-size:0.88rem;color:rgba(255,248,238,0.82);margin-top:0.3rem;">${data.sub}</p>
-            </div>
-          `;
+          placeholder.style.background = 'none';
+          placeholder.style.position   = 'relative';
+          placeholder.style.padding    = '0';
+          placeholder.innerHTML =
+            '<img src="' + imgSrc + '" alt="' + data.label + '" ' +
+            'style="width:100%;height:100%;object-fit:cover;border-radius:0;display:block;position:absolute;inset:0;" ' +
+            'onerror="this.style.display=\'none\'" />' +
+            '<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.65));padding:1.5rem;text-align:center;">' +
+            '<p style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold-light);">' + data.icon + ' ' + data.label + '</p>' +
+            '<p style="font-size:0.88rem;color:rgba(255,248,238,0.82);margin-top:0.3rem;">' + data.sub + '</p>' +
+            '</div>';
         } else {
           placeholder.style.background = data.grad;
-          placeholder.style.position = "";
-          placeholder.style.padding = "2rem";
-          placeholder.innerHTML = `
-            <span class="tour-room-icon">${data.icon}</span>
-            <p class="tour-room-label">${data.label}</p>
-            <p class="tour-room-sub">${data.sub}</p>
-          `;
+          placeholder.style.position   = '';
+          placeholder.style.padding    = '2rem';
+          placeholder.innerHTML =
+            '<span class="tour-room-icon">' + data.icon + '</span>' +
+            '<p class="tour-room-label">' + data.label + '</p>' +
+            '<p class="tour-room-sub">' + data.sub + '</p>';
         }
-
-        tourDisplay.style.opacity = "1";
+        tourDisplay.style.opacity = '1';
       }, 350);
     });
   });
 })();
+
+
 /* ============================================================
-   COUNTDOWN TIMER
-   — Automatically counts down from TODAY (right now)
-   — to your event date below
-   — updates every second
+   4. COUNTDOWN TIMER
    ============================================================ */
 (function initCountdown() {
 
-  /* ✏️ CHANGE ONLY THIS LINE — your event date and time */
+  /* ============================================================
+     HOW THIS WORKS:
+     - eventDate  = your fixed event date (15 March 2026)
+     - new Date() = today's current date and time (auto)
+     - diff       = eventDate MINUS today = time remaining
+     So the countdown always shows how many days/hours/minutes/
+     seconds are LEFT from RIGHT NOW until your event.
+     Today is 28 Feb 2026 → event is 15 Mar 2026 → 15 days left.
+     Tomorrow it will show 14 days. This is CORRECT behaviour.
+     ============================================================ */
+
+  /* ✏️ Only change this — your actual event date and time */
   const eventDate = new Date('2026-03-15T07:30:00');
-  /*                              ↑         ↑
-                             YYYY-MM-DD  HH:MM:SS     */
 
   const daysEl  = document.getElementById('cd-days');
   const hoursEl = document.getElementById('cd-hours');
@@ -165,310 +157,270 @@
   const secsEl  = document.getElementById('cd-secs');
   const labelEl = document.querySelector('.cd-event-label');
 
-  /* Stop if any element is missing */
   if (!daysEl || !hoursEl || !minsEl || !secsEl) {
-    console.warn('Countdown: elements not found in HTML');
+    console.warn('Countdown: HTML elements not found');
     return;
   }
 
-  /* Pad single digit: 5 → "05" */
+  /* Pad: 5 → "05" */
   function pad(n) {
     return String(n).padStart(2, '0');
   }
 
   function updateCountdown() {
+    const now  = new Date();      /* current time right now — changes every second */
+    const diff = eventDate - now; /* milliseconds remaining until event            */
 
-    const now  = new Date();       /* ← always grabs TODAY's current time */
-    const diff = eventDate - now;  /* ← difference in milliseconds        */
-
-    /* If event has already passed show zeros */
     if (diff <= 0) {
       daysEl.textContent  = '00';
       hoursEl.textContent = '00';
       minsEl.textContent  = '00';
       secsEl.textContent  = '00';
-      if (labelEl) {
-        labelEl.textContent = '🎉 The Griha Pravesh has begun! Welcome home!';
-      }
+      if (labelEl) labelEl.textContent = '🎉 The Griha Pravesh has begun! Welcome home!';
       return;
     }
 
-    /* Break milliseconds into days / hours / minutes / seconds */
+    /* Convert milliseconds → days, hours, minutes, seconds */
     const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60))      / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60))           / 1000);
 
-    /* Update the 4 boxes on screen */
     daysEl.textContent  = pad(days);
     hoursEl.textContent = pad(hours);
     minsEl.textContent  = pad(minutes);
     secsEl.textContent  = pad(seconds);
   }
 
-  /* Run once immediately so numbers appear right away — no blank flash */
+  /* Run immediately so numbers show at once — no blank flash */
   updateCountdown();
 
-  /* Then tick every 1000ms = 1 second */
+  /* Repeat every 1 second — seconds digit ticks live */
   setInterval(updateCountdown, 1000);
 
 })();
 
+
 /* ============================================================
-   5. BLESSINGS / GUEST MESSAGES + WHATSAPP
+   5. BLESSINGS + WHATSAPP
    ============================================================ */
 (function initBlessings() {
-  const form = document.getElementById("blessingForm");
-  const nameInput = document.getElementById("guestName");
-  const msgInput = document.getElementById("guestMsg");
-  const messagesList = document.getElementById("messagesList");
-  const placeholder = document.getElementById("placeholderMsg");
+  const form         = document.getElementById('blessingForm');
+  const nameInput    = document.getElementById('guestName');
+  const msgInput     = document.getElementById('guestMsg');
+  const messagesList = document.getElementById('messagesList');
+  const placeholder  = document.getElementById('placeholderMsg');
 
   if (!form || !nameInput || !msgInput || !messagesList) return;
 
   /* ✏️ Your WhatsApp number — country code + number, no + or spaces */
-  const YOUR_WHATSAPP_NUMBER = "919880779134"; /* 91 = India country code */
+  const YOUR_WHATSAPP_NUMBER = '919880779134';
 
-  /* Pre-loaded sample blessings shown on page load */
-  const sampleBlessings = [
-    {
-      name: "Auntie Kamala",
-      msg: "May Goddess Lakshmi bless every corner of your beautiful home. So proud of you all! 🙏🌸",
-    },
-    {
-      name: "The Verma Family",
-      msg: "Congratulations! Wishing Kochchatti Niwas endless happiness, laughter, and love.",
-    },
+  /* Sample blessings shown on page load */
+  var samples = [
+    { name: 'Auntie Kamala',    msg: 'May Goddess Lakshmi bless every corner of your beautiful home. So proud of you all! 🙏🌸' },
+    { name: 'The Verma Family', msg: 'Congratulations! Wishing Kochchatti Niwas endless happiness, laughter, and love.' }
   ];
-  sampleBlessings.forEach((b) => addBlessingCard(b.name, b.msg, true));
+  samples.forEach(function(b) { addBlessingCard(b.name, b.msg, true); });
 
-  /* Submit handler */
-  form.addEventListener("submit", function (e) {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const name = nameInput.value.trim();
-    const msg = msgInput.value.trim();
+    var name = nameInput.value.trim();
+    var msg  = msgInput.value.trim();
     if (!name || !msg) return;
 
-    /* 1 — Show card on screen */
+    /* Show on screen */
     addBlessingCard(name, msg, false);
 
-    /* 2 — Build WhatsApp message */
-    const waText = encodeURIComponent(
-      "🙏 *Griha Pravesh Blessing*\n\n" +
-        "*Name:* " +
-        name +
-        "\n" +
-        "*Message:* " +
-        msg,
+    /* Send to WhatsApp */
+    var waText = encodeURIComponent(
+      '🙏 *Griha Pravesh Blessing*\n\n' +
+      '*Name:* ' + name + '\n' +
+      '*Message:* ' + msg
     );
+    window.open('https://wa.me/' + YOUR_WHATSAPP_NUMBER + '?text=' + waText, '_blank');
 
-    /* 3 — Open WhatsApp with pre-filled message */
-    const waURL = "https://wa.me/" + YOUR_WHATSAPP_NUMBER + "?text=" + waText;
-    window.open(waURL, "_blank");
-
-    /* 4 — Clear fields */
-    nameInput.value = "";
-    msgInput.value = "";
+    /* Clear fields */
+    nameInput.value = '';
+    msgInput.value  = '';
     nameInput.focus();
   });
 
-  /* Creates and inserts a blessing card into the DOM */
   function addBlessingCard(name, msg, noAnim) {
-    if (placeholder) placeholder.style.display = "none";
+    if (placeholder) placeholder.style.display = 'none';
 
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const dateStr = now.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+    var now     = new Date();
+    var timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    var dateStr = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
-    const card = document.createElement("div");
-    card.className = "blessing-card" + (noAnim ? " no-anim" : "");
+    var card = document.createElement('div');
+    card.className = 'blessing-card' + (noAnim ? ' no-anim' : '');
     card.innerHTML =
-      '<p class="blessing-card-name">🙏 ' +
-      escapeHTML(name) +
-      "</p>" +
-      '<p class="blessing-card-msg">' +
-      escapeHTML(msg) +
-      "</p>" +
-      '<p class="blessing-card-time">' +
-      dateStr +
-      " at " +
-      timeStr +
-      "</p>";
+      '<p class="blessing-card-name">🙏 ' + escapeHTML(name) + '</p>' +
+      '<p class="blessing-card-msg">'      + escapeHTML(msg)  + '</p>' +
+      '<p class="blessing-card-time">'     + dateStr + ' at ' + timeStr + '</p>';
 
-    /* Newest messages appear at top */
     messagesList.insertBefore(card, messagesList.firstChild);
     if (!noAnim) messagesList.scrollTop = 0;
   }
 
-  /* Escapes HTML to prevent XSS — never skip this */
   function escapeHTML(str) {
-    const div = document.createElement("div");
+    var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
   }
 })();
 
+
 /* ============================================================
    6. PHOTO GALLERY LIGHTBOX
    ============================================================ */
 (function initGallery() {
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
+  var lightbox    = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
 
   if (!lightbox || !lightboxImg) return;
 
-  const allImages = Array.from(
-    document.querySelectorAll(".gallery-item img"),
-  ).map((img) => img.src);
+  var allImages = Array.from(document.querySelectorAll('.gallery-item img'))
+                       .map(function(img) { return img.src; });
 
-  let currentIndex = 0;
+  var currentIndex = 0;
 
-  window.openLightbox = function (tile) {
-    const src = tile.querySelector("img").src;
+  window.openLightbox = function(tile) {
+    var src = tile.querySelector('img').src;
     currentIndex = allImages.indexOf(src);
     lightboxImg.src = src;
-    lightbox.classList.add("open");
-    document.body.style.overflow = "hidden";
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
   };
 
-  window.closeLightbox = function () {
-    lightbox.classList.remove("open");
-    document.body.style.overflow = "";
+  window.closeLightbox = function() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
   };
 
-  window.prevPhoto = function (e) {
+  window.prevPhoto = function(e) {
     e.stopPropagation();
     currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
     swapImage(allImages[currentIndex]);
   };
 
-  window.nextPhoto = function (e) {
+  window.nextPhoto = function(e) {
     e.stopPropagation();
     currentIndex = (currentIndex + 1) % allImages.length;
     swapImage(allImages[currentIndex]);
   };
 
   function swapImage(src) {
-    lightboxImg.style.transition = "opacity 0.2s ease, transform 0.2s ease";
-    lightboxImg.style.opacity = "0";
-    lightboxImg.style.transform = "scale(0.92)";
-    setTimeout(() => {
-      lightboxImg.src = src;
-      lightboxImg.style.opacity = "1";
-      lightboxImg.style.transform = "scale(1)";
+    lightboxImg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    lightboxImg.style.opacity    = '0';
+    lightboxImg.style.transform  = 'scale(0.92)';
+    setTimeout(function() {
+      lightboxImg.src             = src;
+      lightboxImg.style.opacity   = '1';
+      lightboxImg.style.transform = 'scale(1)';
     }, 200);
   }
 
-  document.addEventListener("keydown", (e) => {
-    if (!lightbox.classList.contains("open")) return;
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") prevPhoto(e);
-    if (e.key === "ArrowRight") nextPhoto(e);
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  prevPhoto(e);
+    if (e.key === 'ArrowRight') nextPhoto(e);
   });
 })();
+
 
 /* ============================================================
    7. BACKGROUND MUSIC PLAYER
    ============================================================ */
 (function initMusicPlayer() {
-  const audio = document.getElementById("bgMusic");
-  const btn = document.getElementById("musicBtn");
-  const label = document.getElementById("musicLabel");
+  var audio = document.getElementById('bgMusic');
+  var btn   = document.getElementById('musicBtn');
+  var label = document.getElementById('musicLabel');
 
   if (!audio || !btn || !label) return;
 
-  const hasSource = audio.querySelector("source") !== null;
-  if (!hasSource) label.textContent = "Add music.mp3";
+  var hasSource = audio.querySelector('source') !== null;
+  if (!hasSource) label.textContent = 'Add music.mp3';
 
-  let isPlaying = false;
+  var isPlaying = false;
 
-  btn.addEventListener("click", () => {
+  btn.addEventListener('click', function() {
     if (!hasSource) {
-      label.textContent = "Add a source in HTML!";
-      setTimeout(() => {
-        label.textContent = "Add music.mp3";
-      }, 2500);
+      label.textContent = 'Add a source in HTML!';
+      setTimeout(function() { label.textContent = 'Add music.mp3'; }, 2500);
       return;
     }
     if (isPlaying) {
       audio.pause();
-      btn.textContent = "🎵";
-      label.textContent = "Music";
+      btn.textContent   = '🎵';
+      label.textContent = 'Music';
       isPlaying = false;
     } else {
-      audio
-        .play()
-        .then(() => {
-          btn.textContent = "⏸";
-          label.textContent = "Playing";
+      audio.play()
+        .then(function() {
+          btn.textContent   = '⏸';
+          label.textContent = 'Playing';
           isPlaying = true;
         })
-        .catch((err) => {
-          console.warn("Audio could not play:", err);
-          label.textContent = "Blocked";
+        .catch(function(err) {
+          console.warn('Audio could not play:', err);
+          label.textContent = 'Blocked';
         });
     }
   });
 })();
 
+
 /* ============================================================
    8. SMOOTH SCROLL
    ============================================================ */
 (function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", function (e) {
-      const targetId = this.getAttribute("href");
-      if (targetId === "#") return;
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var targetId = this.getAttribute('href');
+      if (targetId === '#') return;
 
-      const target = document.querySelector(targetId);
+      var target = document.querySelector(targetId);
       if (!target) return;
 
       e.preventDefault();
-      const navH = document.getElementById("navbar").offsetHeight;
-      const top =
-        target.getBoundingClientRect().top + window.pageYOffset - navH - 10;
-      window.scrollTo({ top, behavior: "smooth" });
+      var navH = document.getElementById('navbar').offsetHeight;
+      var top  = target.getBoundingClientRect().top + window.pageYOffset - navH - 10;
+      window.scrollTo({ top: top, behavior: 'smooth' });
     });
   });
 })();
+
 
 /* ============================================================
    9. ACTIVE NAV HIGHLIGHT
    ============================================================ */
 (function initActiveNav() {
-  const sections = document.querySelectorAll("section[id]");
-  const navItems = document.querySelectorAll(".nav-links a");
+  var sections = document.querySelectorAll('section[id]');
+  var navItems = document.querySelectorAll('.nav-links a');
 
   if (!sections.length || !navItems.length) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute("id");
-          navItems.forEach((a) => {
-            a.style.background = "";
-            a.style.color = "";
-            a.style.fontWeight = "";
-            if (a.getAttribute("href") === "#" + id) {
-              a.style.background = "rgba(200,146,42,0.2)";
-              a.style.color = "#E8B84B";
-              a.style.fontWeight = "bold";
-            }
-          });
-        }
-      });
-    },
-    { threshold: 0.4 },
-  );
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.getAttribute('id');
+        navItems.forEach(function(a) {
+          a.style.background = '';
+          a.style.color      = '';
+          a.style.fontWeight = '';
+          if (a.getAttribute('href') === '#' + id) {
+            a.style.background = 'rgba(200,146,42,0.2)';
+            a.style.color      = '#E8B84B';
+            a.style.fontWeight = 'bold';
+          }
+        });
+      }
+    });
+  }, { threshold: 0.4 });
 
-  sections.forEach((s) => observer.observe(s));
+  sections.forEach(function(s) { observer.observe(s); });
 })();
