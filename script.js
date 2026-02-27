@@ -148,68 +148,72 @@
 })();
 
 /* ============================================================
-   4. COUNTDOWN TIMER
-   — counts down from RIGHT NOW to the event date
-   — new Date() always gets current time automatically
-   — updates every second using setInterval
+   COUNTDOWN TIMER
+   — Automatically counts down from TODAY (right now)
+   — to your event date below
+   — updates every second
    ============================================================ */
 (function initCountdown() {
-  /* ✏️ Set your event date and time here — YYYY-MM-DDTHH:MM:SS */
-const eventDate = new Date('2026-03-15T07:30:00');
 
-  const daysEl = document.getElementById("cd-days");
-  const hoursEl = document.getElementById("cd-hours");
-  const minsEl = document.getElementById("cd-mins");
-  const secsEl = document.getElementById("cd-secs");
-  const labelEl = document.querySelector(".cd-event-label");
+  /* ✏️ CHANGE ONLY THIS LINE — your event date and time */
+  const eventDate = new Date('2026-03-15T07:30:00');
+  /*                              ↑         ↑
+                             YYYY-MM-DD  HH:MM:SS     */
 
-  /* Stop if any element is missing in HTML */
+  const daysEl  = document.getElementById('cd-days');
+  const hoursEl = document.getElementById('cd-hours');
+  const minsEl  = document.getElementById('cd-mins');
+  const secsEl  = document.getElementById('cd-secs');
+  const labelEl = document.querySelector('.cd-event-label');
+
+  /* Stop if any element is missing */
   if (!daysEl || !hoursEl || !minsEl || !secsEl) {
-    console.warn("Countdown: one or more elements not found in HTML");
+    console.warn('Countdown: elements not found in HTML');
     return;
   }
 
-  /* Pad single digit numbers: 5 → "05" */
+  /* Pad single digit: 5 → "05" */
   function pad(n) {
-    return String(n).padStart(2, "0");
+    return String(n).padStart(2, '0');
   }
 
   function updateCountdown() {
-    const now = new Date(); /* current date/time right now */
-    const diff = eventDate - now; /* milliseconds remaining      */
 
-    /* Event has already passed */
+    const now  = new Date();       /* ← always grabs TODAY's current time */
+    const diff = eventDate - now;  /* ← difference in milliseconds        */
+
+    /* If event has already passed show zeros */
     if (diff <= 0) {
-      daysEl.textContent = "00";
-      hoursEl.textContent = "00";
-      minsEl.textContent = "00";
-      secsEl.textContent = "00";
+      daysEl.textContent  = '00';
+      hoursEl.textContent = '00';
+      minsEl.textContent  = '00';
+      secsEl.textContent  = '00';
       if (labelEl) {
-        labelEl.textContent = "🎉 The Griha Pravesh has begun! Welcome home!";
+        labelEl.textContent = '🎉 The Griha Pravesh has begun! Welcome home!';
       }
       return;
     }
 
-    /* Calculate days, hours, minutes, seconds from ms */
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    /* Break milliseconds into days / hours / minutes / seconds */
+    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60))      / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60))           / 1000);
 
-    /* Update the DOM */
-    daysEl.textContent = pad(days);
+    /* Update the 4 boxes on screen */
+    daysEl.textContent  = pad(days);
     hoursEl.textContent = pad(hours);
-    minsEl.textContent = pad(minutes);
-    secsEl.textContent = pad(seconds);
+    minsEl.textContent  = pad(minutes);
+    secsEl.textContent  = pad(seconds);
   }
 
-  /* Run once immediately so numbers show right away */
+  /* Run once immediately so numbers appear right away — no blank flash */
   updateCountdown();
 
-  /* Then update every 1000ms = 1 second */
+  /* Then tick every 1000ms = 1 second */
   setInterval(updateCountdown, 1000);
-})();
 
+})();
 /* ============================================================
    5. BLESSINGS / GUEST MESSAGES + WHATSAPP
    ============================================================ */
