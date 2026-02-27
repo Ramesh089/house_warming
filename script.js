@@ -134,22 +134,12 @@
 
 /* ============================================================
    4. COUNTDOWN TIMER
+   ✅ UPDATED — Event date: 5th March 2026
    ============================================================ */
 (function initCountdown() {
 
-  /* ============================================================
-     HOW THIS WORKS:
-     - eventDate  = your fixed event date (15 March 2026)
-     - new Date() = today's current date and time (auto)
-     - diff       = eventDate MINUS today = time remaining
-     So the countdown always shows how many days/hours/minutes/
-     seconds are LEFT from RIGHT NOW until your event.
-     Today is 28 Feb 2026 → event is 15 Mar 2026 → 15 days left.
-     Tomorrow it will show 14 days. This is CORRECT behaviour.
-     ============================================================ */
-
-  /* ✏️ Only change this — your actual event date and time */
-  const eventDate = new Date('2026-03-15T07:30:00');
+  /* ✅ CHANGED TO 5th MARCH 2026 */
+  const eventDate = new Date('2026-03-05T07:30:00');
 
   const daysEl  = document.getElementById('cd-days');
   const hoursEl = document.getElementById('cd-hours');
@@ -162,14 +152,13 @@
     return;
   }
 
-  /* Pad: 5 → "05" */
   function pad(n) {
     return String(n).padStart(2, '0');
   }
 
   function updateCountdown() {
-    const now  = new Date();      /* current time right now — changes every second */
-    const diff = eventDate - now; /* milliseconds remaining until event            */
+    const now  = new Date();
+    const diff = eventDate - now;
 
     if (diff <= 0) {
       daysEl.textContent  = '00';
@@ -180,7 +169,6 @@
       return;
     }
 
-    /* Convert milliseconds → days, hours, minutes, seconds */
     const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60))      / (1000 * 60));
@@ -192,10 +180,7 @@
     secsEl.textContent  = pad(seconds);
   }
 
-  /* Run immediately so numbers show at once — no blank flash */
   updateCountdown();
-
-  /* Repeat every 1 second — seconds digit ticks live */
   setInterval(updateCountdown, 1000);
 
 })();
@@ -213,10 +198,8 @@
 
   if (!form || !nameInput || !msgInput || !messagesList) return;
 
-  /* ✏️ Your WhatsApp number — country code + number, no + or spaces */
   const YOUR_WHATSAPP_NUMBER = '919880779134';
 
-  /* Sample blessings shown on page load */
   var samples = [
     { name: 'Auntie Kamala',    msg: 'May Goddess Lakshmi bless every corner of your beautiful home. So proud of you all! 🙏🌸' },
     { name: 'The Verma Family', msg: 'Congratulations! Wishing Kochchatti Niwas endless happiness, laughter, and love.' }
@@ -230,10 +213,8 @@
     var msg  = msgInput.value.trim();
     if (!name || !msg) return;
 
-    /* Show on screen */
     addBlessingCard(name, msg, false);
 
-    /* Send to WhatsApp */
     var waText = encodeURIComponent(
       '🙏 *Griha Pravesh Blessing*\n\n' +
       '*Name:* ' + name + '\n' +
@@ -241,7 +222,6 @@
     );
     window.open('https://wa.me/' + YOUR_WHATSAPP_NUMBER + '?text=' + waText, '_blank');
 
-    /* Clear fields */
     nameInput.value = '';
     msgInput.value  = '';
     nameInput.focus();
