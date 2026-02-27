@@ -146,7 +146,6 @@
     });
   });
 })();
-
 /* ============================================================
    COUNTDOWN TIMER
    — Automatically counts down from TODAY (right now)
@@ -214,6 +213,7 @@
   setInterval(updateCountdown, 1000);
 
 })();
+
 /* ============================================================
    5. BLESSINGS / GUEST MESSAGES + WHATSAPP
    ============================================================ */
